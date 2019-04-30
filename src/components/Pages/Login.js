@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Input } from 'reactstrap';
 
-import FormValidator from '../Forms/FormValidator.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { changeLoginState } from '../../store/actions/actions';
 
+import FormValidator from '../Forms/FormValidator.js';
 
 class Login extends Component {
 
+    constructor(props) {
+        super();
+    }
     state = {
         formLogin: {
-            email: '',
-            password: ''
+            account: '',
+            password: '',
+            account_min: 8,
         }
     }
 
@@ -44,17 +51,26 @@ class Login extends Component {
         const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
 
         const { errors, hasError } = FormValidator.bulkValidate(inputs)
-
-        this.setState({
-            [form.name]: {
-                ...this.state[form.name],
-                errors
-            }
-        });
-
-        console.log(hasError ? 'Form has errors. Check!' : 'Form Submitted!')
-
         e.preventDefault()
+
+        if (hasError) {
+            return this.setState({
+                [form.name]: {
+                    ...this.state[form.name],
+                    errors
+                }
+            });
+        }
+
+        if (this.state[form.name].account === 'admin-test' && this.state[form.name].password === '123456' ) {
+            this.props.actions.changeLoginState({
+                login: true, 
+                userInfo: {
+                    name: 'simen-admin',
+                    birthday: '0614'
+                }
+            })
+        }
     }
 
     /* Simplify error check */
@@ -66,6 +82,8 @@ class Login extends Component {
     }
 
     render() {
+        const year = (new Date()).getFullYear();
+
         return (
             <div className="block-center mt-4 wd-xl">
                 <div className="card card-flat">
@@ -75,25 +93,27 @@ class Login extends Component {
                         </a>
                     </div>
                     <div className="card-body">
-                        <p className="text-center py-2">SIGN IN TO CONTINUE.</p>
+                        <p className="text-center py-2">登入以繼續</p>
                         <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <div className="input-group with-focus">
-                                    <Input type="email"
-                                        name="email"
+                                    <Input 
+                                        type="text"
+                                        name="account"
                                         className="border-right-0"
-                                        placeholder="Enter email"
-                                        invalid={this.hasError('formLogin','email','required')||this.hasError('formLogin','email','email')}
+                                        placeholder="帳號"
+                                        invalid={this.hasError('formLogin','account','required') || this.hasError('formLogin','account','minlen')}
                                         onChange={this.validateOnChange}
-                                        data-validate='["required", "email"]'
+                                        data-validate='["required", "minlen"]'
+                                        data-param={this.state.formLogin.account_min}
                                         value={this.state.formLogin.email}/>
                                     <div className="input-group-append">
                                         <span className="input-group-text text-muted bg-transparent border-left-0">
                                             <em className="fa fa-envelope"></em>
                                         </span>
                                     </div>
-                                    { this.hasError('formLogin','email','required') && <span className="invalid-feedback">Field is required</span> }
-                                    { this.hasError('formLogin','email','email') && <span className="invalid-feedback">Field must be valid email</span> }
+                                    { this.hasError('formLogin','account','required') && <span className="invalid-feedback">請勿空白</span> }
+                                    { this.hasError('formLogin','account','minlen') && <span className="invalid-feedback">至少輸入 {this.state.formLogin.account_min} 字元</span> }
                                 </div>
                             </div>
                             <div className="form-group">
@@ -102,7 +122,7 @@ class Login extends Component {
                                         id="id-password"
                                         name="password"
                                         className="border-right-0"
-                                        placeholder="Password"
+                                        placeholder="密碼"
                                         invalid={this.hasError('formLogin','password','required')}
                                         onChange={this.validateOnChange}
                                         data-validate='["required"]'
@@ -113,30 +133,29 @@ class Login extends Component {
                                             <em className="fa fa-lock"></em>
                                         </span>
                                     </div>
-                                    <span className="invalid-feedback">Field is required</span>
+                                    <span className="invalid-feedback">請輸入密碼</span>
                                 </div>
                             </div>
                             <div className="clearfix">
                                 <div className="checkbox c-checkbox float-left mt-0">
                                     <label>
                                         <input type="checkbox" value="" name="remember"/>
-                                        <span className="fa fa-check"></span>Remember Me</label>
+                                        <span className="fa fa-check"></span>記住我</label>
                                 </div>
                                 <div className="float-right">
-                                    <Link to="recover" className="text-muted">Forgot your password?</Link>
+                                    <Link to="recover" className="text-muted">是否忘記密碼?</Link>
                                 </div>
                             </div>
-                            <button className="btn btn-block btn-primary mt-3" type="submit">Login</button>
+                            <button className="btn btn-block btn-primary mt-3" type="submit">登入</button>
                         </form>
-                        <p className="pt-3 text-center">Need to Signup?</p>
-                        <Link to="register" className="btn btn-block btn-secondary">Register Now</Link>
+                        <p className="pt-3 text-center">註冊請洽管理員</p>
                     </div>
                 </div>
                 <div className="p-3 text-center">
                     <span className="mr-2">&copy;</span>
-                    <span>2019</span>
+                    <span>{ year }</span>
                     <span className="mx-2">-</span>
-                    <span>Angle</span>
+                    <span>Oub</span>
                     <br/>
                     <span>Bootstrap Admin Template</span>
                 </div>
@@ -145,4 +164,11 @@ class Login extends Component {
     }
 }
 
-export default Login;
+
+const mapStateToProps = state => ({ auth: state.auth });
+const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ changeLoginState }, dispatch) });
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login);

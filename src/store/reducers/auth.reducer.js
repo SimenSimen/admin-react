@@ -5,13 +5,13 @@ const initialState = {
     userInfo: null,
 }
 
-const authReducer = (state = initialState, action) => {
+const authReducer = (state = initialState , action) => {
     switch (action.type) {
         case CHANGE_LOGIN_STATE:
-            return {
-                ...state,
-                login: action.authState
-            }
+            return Object.assign({}, state, {
+                login: action.authState.login,
+                userInfo: action.authState.userInfo
+            });
         default:
             return state;
     }

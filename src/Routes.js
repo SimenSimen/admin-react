@@ -15,9 +15,8 @@ import { connect } from 'react-redux';
 /* Used to render a lazy component with react-router */
 const waitFor = Tag => props => <Tag {...props}/>;
 
-const SingleView = lazy(() => import('./components/SingleView/SingleView'));
-const SubMenu = lazy(() => import('./components/SubMenu/SubMenu'));
 const Login = lazy(() => import('./components/Pages/Login'));
+const Dashboard = lazy(() => import('./components/Pages/Dashboard'));
 
 // List of routes that uses the page layout
 // listed here to Switch between layouts
@@ -28,7 +27,6 @@ const listofPages = [
 
 const pagesNeedAuth = [
     '/',
-    '/singleview',
 ];
 
 const Routes = ({ location , auth}) => {
@@ -43,7 +41,24 @@ const Routes = ({ location , auth}) => {
     const animationName = 'rag-fadeIn';
     // pages no need auth
     
+    const login = auth.login;
     if(pagesNeedAuth.indexOf(location.pathname) === -1) {
+        const redirectPath = [
+            '/login'
+        ];
+        let redirect = false;
+
+        if(redirectPath.indexOf(location.pathname) > -1) {
+            redirect = true;
+        }
+        if (login && redirect) {
+            return (
+                <Switch location={location}>
+                    <Redirect to="/singleview"/>
+                </Switch>
+            );
+        }
+
         return (
             <BasePage>
                 <Suspense fallback={<PageLoader/>}>
@@ -58,9 +73,11 @@ const Routes = ({ location , auth}) => {
 
     // check login state
 
-    if (!auth.login) {
+    if (!login) {
         return (
-            <Redirect to="/login"/>
+            <Switch location={location}>
+                <Redirect to="/login"/>
+            </Switch>
         );
     }
     
@@ -71,7 +88,6 @@ const Routes = ({ location , auth}) => {
                 <Suspense fallback={<PageLoader/>}>
                     <Switch location={location}>
                         {/* See full project for reference */}
-                        <Route path="/login" component={waitFor(Login)}/>
                     </Switch>
                 </Suspense>
             </BasePage>
@@ -87,10 +103,9 @@ const Routes = ({ location , auth}) => {
                     <div>
                         <Suspense fallback={<PageLoader/>}>
                             <Switch location={location}>
-                                <Route path="/singleview" component={waitFor(SingleView)}/>
-                                <Route path="/submenu" component={waitFor(SubMenu)}/>
+                                <Route exact path="/" component={waitFor(Dashboard)}/>
 
-                                <Redirect to="/singleview"/>
+                                <Redirect to="/"/>
                             </Switch>
                         </Suspense>
                     </div>

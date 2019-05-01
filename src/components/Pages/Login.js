@@ -7,12 +7,16 @@ import { bindActionCreators } from 'redux';
 import { changeLoginState } from '../../store/actions/actions';
 
 import FormValidator from '../Forms/FormValidator.js';
+import HttpRequest from '../../core/HttpRequest';
+
+const _ajax = new HttpRequest('api');
 
 class Login extends Component {
 
     constructor(props) {
         super();
     }
+
     state = {
         formLogin: {
             account: '',
@@ -62,8 +66,9 @@ class Login extends Component {
             });
         }
 
+        // test login account
         if (this.state[form.name].account === 'admin-test' && this.state[form.name].password === '123456' ) {
-            this.props.actions.changeLoginState({
+            return this.props.actions.changeLoginState({
                 login: true, 
                 userInfo: {
                     name: 'simen-admin',
@@ -71,6 +76,9 @@ class Login extends Component {
                 }
             })
         }
+
+        _ajax.post();
+
     }
 
     /* Simplify error check */

@@ -11,13 +11,19 @@ import 'raf/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { route } from './core/RouteManager';
 
 import App from './App';
 
 import './i18n';
 
 import configureStore from './store/store';
+
 const store = configureStore();
+
+/* rotue init */
+routeRegister();
+
 
 ReactDOM.render(
     <Provider store={store}>
@@ -25,3 +31,7 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('app')
 );
+
+function routeRegister() {
+    route('post' , '/ajax/login' , 'auth.login');
+}

@@ -1,97 +1,99 @@
 import axios from 'axios';
-
-import api from '../config/api';
-let totalConfig = { api };
-
-export const routes = {
-    'api.auth.login': '/login',
-    'api.auth.logout': '/logout',
-
-    'api.data.menu': '/menu'
-};
+import _ from 'lodash';
 
 class HttpRequest {
     constructor(config=null) {
-        switch (config) {
-            case 'api':
-                config = totalConfig[config];
-                break;
-            default:
-                config = {};
-                break;
-        };
-        
-        this._axios = axios.create(config);
 
+        const axiosConfig = {}
+
+        /** member variable */
+        this.errorCallback = null;
+
+        if (_.isObject(config)) {
+            
+        }
+        
+        this._axios = axios.create(axiosConfig);
     }
+    
     /**
+     * 
      * get method 
+     * 
+     * @param {String} url 
+     * @param {Object} params 
      */
     get(url , params=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
-
         return this._buildAxios('get' , url , params);
     }
+
     /**
+     * 
      * post method
+     * 
+     * @param {String} url 
+     * @param {Object} data 
      */
     post(url , data=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
-
         return this._buildAxios('post' , url , data);
     }
-
+    
+    /**
+     * 
+     * delete method
+     * 
+     * @param {String} url 
+     * @param {Object} params 
+     */
     delete(url , params=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
-
         return this._buildAxios('delete' , url , params);
-
     }
 
+    /**
+     * 
+     * put method
+     * 
+     * @param {String} url 
+     * @param {Object} data 
+     */
     put(url , data=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
-
         return this._buildAxios('put' , url , data);
     }
 
-    patch(url , data=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
 
+    /**
+     * 
+     * patch method
+     * 
+     * @param {String} url 
+     * @param {Object} data 
+     */
+    patch(url , data=null) {
         return this._buildAxios('patch' , url , data);
     }
 
-    head(url , params=null) {
-        if (this._checkRoutes(url)) {
-            url = routes[url]; 
-        }
-
-        return this._buildAxios('head' , url , params);
-    }
     /**
-     * do something by method name
-     * @param {*} method 
-     * @param {*} params 
-     * @param {*} callback 
+     * head method
+     * 
+     * @param {String} url 
+     * @param {Object} params 
      */
-    do(method , params=[] , callback) {
+    head(url , params=null) {
+        return this._buildAxios('head' , url , params);
+    }    
 
-    }
-
-    _checkRoutes(urlName) {
-        return !! routes[urlName];
-    }
+    /**
+     * 
+     * @param {Object} error 
+     */
     _error(error) {
-        console.log(error);
+        if (!!this.errorCallback && _.isFunction(this.errorCallback)) {
+            this.errorCallback.call(this , error , Date.now());
+        }
+        
+        else {
+            console.log(error);
+        }
     }
 
     _buildAxios(method , url , data=null) {
@@ -99,6 +101,7 @@ class HttpRequest {
             url: url,
             method: method
         };
+
         if (!!data) {
             switch (method) {
                 case 'get':

@@ -24,7 +24,6 @@ const store = configureStore();
 /* rotue init */
 routeRegister();
 
-
 ReactDOM.render(
     <Provider store={store}>
         <App />

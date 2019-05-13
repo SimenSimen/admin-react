@@ -4,3 +4,10 @@ export class RouteException {
         this.name = 'RouteException';
     }
 }
+
+export class Exception {
+    constructor(message) {
+        this.message = message;
+        this.name = 'NormalException';
+    }
+}

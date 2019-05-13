@@ -1,16 +1,13 @@
 import { RouteException } from './Error';
 
+const routes = {};
+
 /**
  * route manager for ajax;
  */
 class RouteManager {
 
-    constructor() {
-        this.routes = {};
-    }
-
     /**
-     * 
      * set route;
      * 
      * @param {String} method 
@@ -19,11 +16,11 @@ class RouteManager {
      * @returns {void}
      */
     set(method , url , name) {
-        if (!!this.routes[name]) {
+        if (!!routes[name]) {
             throw new RouteException(`route's name is already set`);
         }
 
-        this.routes[name] = [method , url];
+        routes[name] = [method , url];
     }
 
     /**
@@ -35,12 +32,13 @@ class RouteManager {
      */
     get(name) {
         
-        if (!!this.routes[name]) {
+        if (!!routes[name]) {
             throw new RouteException(`trying to get undefined route`);
         }
 
-        return this.routes[name];
+        return routes[name];
     }
+
 }
 
 const manager = new RouteManager();
@@ -50,20 +48,30 @@ const manager = new RouteManager();
  * Alias for manager.get with 1 param
  * Alias for manager.set with 3 params
  * 
- * @param {String} name 
- * @returns {Array|Void}
+ * @param { String } name 
+ * @returns { Array | Void }
  */
 export function route(name) {
 
     switch (arguments.length) {
         case 3:
             manager.set(arguments[0] , arguments[1] , arguments[2]);
-            break;
+            return null;
         default:
             break;
     }
 
     return manager.get(name);
+}
+
+
+/**
+ * get list of route
+ * 
+ * @returns { Object }
+ */
+export function list() {
+    return routes;
 }
 
 export default manager;

@@ -3,21 +3,10 @@ import _ from 'lodash';
 
 class HttpRequest {
     constructor(config=null) {
-
-        const axiosConfig = {}
-
-        /** member variable */
-        this.errorCallback = null;
-
-        if (_.isObject(config)) {
-            
-        }
-        
-        this._axios = axios.create(axiosConfig);
+        this._axios = axios.create(config);
     }
     
     /**
-     * 
      * get method 
      * 
      * @param {String} url 
@@ -28,7 +17,6 @@ class HttpRequest {
     }
 
     /**
-     * 
      * post method
      * 
      * @param {String} url 
@@ -39,7 +27,6 @@ class HttpRequest {
     }
     
     /**
-     * 
      * delete method
      * 
      * @param {String} url 
@@ -50,7 +37,6 @@ class HttpRequest {
     }
 
     /**
-     * 
      * put method
      * 
      * @param {String} url 
@@ -62,7 +48,6 @@ class HttpRequest {
 
 
     /**
-     * 
      * patch method
      * 
      * @param {String} url 
@@ -119,8 +104,7 @@ class HttpRequest {
             }
         }
 
-        return this._axios(config).catch(this._error);
-
+        return this._axios(config).catch(this._error.bind(this));
     }
 }
 

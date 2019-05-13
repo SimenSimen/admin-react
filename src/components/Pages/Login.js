@@ -7,9 +7,8 @@ import { bindActionCreators } from 'redux';
 import { changeLoginState } from '../../store/actions/actions';
 
 import FormValidator from '../Forms/FormValidator.js';
-import HttpRequest from '../../core/HttpRequest';
 
-const _ajax = new HttpRequest('api');
+import { request } from '../../core/AjaxManager';
 
 class Login extends Component {
 
@@ -66,18 +65,10 @@ class Login extends Component {
             });
         }
 
-        // test login account
-        if (this.state[form.name].account === 'admin-test' && this.state[form.name].password === '123456' ) {
-            return this.props.actions.changeLoginState({
-                login: true, 
-                userInfo: {
-                    name: 'simen-admin',
-                    birthday: '0614'
-                }
-            })
+        const data = {
+            account: this.state[form.name].account,
+            password: this.state[form.name].password
         }
-
-        _ajax.post();
 
     }
 
@@ -165,7 +156,7 @@ class Login extends Component {
                     <span className="mx-2">-</span>
                     <span>Oub</span>
                     <br/>
-                    <span>Bootstrap Admin Template</span>
+                    <span>Oub Merchant Console</span>
                 </div>
             </div>
         );

@@ -33,6 +33,9 @@ class AjaxManager {
 
 const Manager = new AjaxManager();
 
+/**
+ * @returns {HttpRequest}
+ */
 export function request(name='default') {
     return Manager.getInstance(name);
 }

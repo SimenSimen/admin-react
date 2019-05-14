@@ -10,7 +10,8 @@ const authReducer = (state = initialState , action) => {
         case CHANGE_LOGIN_STATE:
             return Object.assign({}, state, {
                 login: action.authState.login,
-                userInfo: action.authState.userInfo
+                userInfo: action.authState.userInfo,
+                jwt: action.authState.jwt,
             });
         default:
             return state;

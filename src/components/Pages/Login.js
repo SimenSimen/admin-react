@@ -10,6 +10,9 @@ import FormValidator from '../Forms/FormValidator.js';
 
 import { request } from '../../core/AjaxManager';
 
+
+import 'spinkit/css/spinkit.css';
+
 class Login extends Component {
 
     constructor(props) {
@@ -21,7 +24,8 @@ class Login extends Component {
             account: '',
             password: '',
             account_min: 8,
-        }
+        },
+        loading: false
     }
 
      /**
@@ -46,7 +50,6 @@ class Login extends Component {
                 }
             }
         });
-
     }
 
     onSubmit = e => {
@@ -54,6 +57,7 @@ class Login extends Component {
         const inputs = [...form.elements].filter(i => ['INPUT', 'SELECT'].includes(i.nodeName))
 
         const { errors, hasError } = FormValidator.bulkValidate(inputs)
+        const self = this;
         e.preventDefault()
 
         if (hasError) {
@@ -70,6 +74,32 @@ class Login extends Component {
             password: this.state[form.name].password
         }
 
+        this.setState({
+            loading: true
+        })
+        
+        request().post('ajax/login' , data).then((result) => {
+            if (!result) {
+                alert('連線有問題！');
+            }
+            
+            else if (result.data && result.data.status) {
+                return self.props.actions.changeLoginState({
+                    login: true,
+                    userInfo: {
+                        account: data.account
+                    },
+                    jwt: result.data.jwt
+                })
+            }
+            else {
+                alert(result.data && result.data.error ? result.data.error : '發生錯誤!');
+            }
+
+            self.setState({
+                loading: false
+            })
+        });
     }
 
     /* Simplify error check */
@@ -82,7 +112,7 @@ class Login extends Component {
 
     render() {
         const year = (new Date()).getFullYear();
-
+        
         return (
             <div className="block-center mt-4 wd-xl">
                 <div className="card card-flat">
@@ -92,7 +122,25 @@ class Login extends Component {
                         </a>
                     </div>
                     <div className="card-body">
-                        <p className="text-center py-2">登入以繼續</p>
+                        <div className="text-center py-2">
+                            { !this.state.loading && <p>登入以繼續</p> }
+                            { this.state.loading && 
+                                <div className="sk-circle hidden">
+                                    <div className="sk-circle1 sk-child"></div>
+                                    <div className="sk-circle2 sk-child"></div>
+                                    <div className="sk-circle3 sk-child"></div>
+                                    <div className="sk-circle4 sk-child"></div>
+                                    <div className="sk-circle5 sk-child"></div>
+                                    <div className="sk-circle6 sk-child"></div>
+                                    <div className="sk-circle7 sk-child"></div>
+                                    <div className="sk-circle8 sk-child"></div>
+                                    <div className="sk-circle9 sk-child"></div>
+                                    <div className="sk-circle10 sk-child"></div>
+                                    <div className="sk-circle11 sk-child"></div>
+                                    <div className="sk-circle12 sk-child"></div>
+                                </div>
+                            }
+                        </div>
                         <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <div className="input-group with-focus">

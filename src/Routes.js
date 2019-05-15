@@ -54,7 +54,7 @@ const Routes = ({ location , auth}) => {
         if (login && redirect) {
             return (
                 <Switch location={location}>
-                    <Redirect to="/singleview"/>
+                    <Redirect to="/"/>
                 </Switch>
             );
         }

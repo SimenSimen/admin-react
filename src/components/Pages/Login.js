@@ -84,12 +84,11 @@ class Login extends Component {
             }
             
             else if (result.data && result.data.status) {
+                
                 return self.props.actions.changeLoginState({
                     login: true,
-                    userInfo: {
-                        account: data.account
-                    },
-                    jwt: result.data.jwt
+                    userInfo: result.data.data.user,
+                    jwt: result.data.data.jwt
                 })
             }
             else {

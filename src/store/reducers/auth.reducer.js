@@ -1,4 +1,5 @@
-import { CHANGE_LOGIN_STATE } from '../actions/actions';
+import { USER_LOGIN, USER_LOGOUT } from '../actions/actions';
+import Manager from '../../core/AjaxManager';
 
 const initialState = {
     login: false,
@@ -7,12 +8,26 @@ const initialState = {
 
 const authReducer = (state = initialState , action) => {
     switch (action.type) {
-        case CHANGE_LOGIN_STATE:
+        case USER_LOGIN:
+            const defaultAjaxInstance = Manager.getInstance();    
+
+            defaultAjaxInstance._axios.defaults.headers.common = {
+                Authorization: "Bearer " + action.authState.jwt
+            }
+        
             return Object.assign({}, state, {
                 login: action.authState.login,
                 userInfo: action.authState.userInfo,
                 jwt: action.authState.jwt,
             });
+
+        case USER_LOGOUT:
+            return Object.assign({}, state, {
+                login: false,
+                userInfo: null,
+                jwt: null
+            });
+            
         default:
             return state;
     }

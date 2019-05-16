@@ -6,6 +6,10 @@ class HttpRequest {
         this._axios = axios.create(config);
     }
     
+    setErrorHandler(callback) 
+    {
+        this.errorCallback = callback;
+    }
     /**
      * get method 
      * 
@@ -79,6 +83,8 @@ class HttpRequest {
         else {
             console.log(error);
         }
+
+        return (error);
     }
 
     _buildAxios(method , url , data=null) {

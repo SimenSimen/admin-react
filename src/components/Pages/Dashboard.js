@@ -2,24 +2,48 @@ import React , { Component } from 'react';
 
 // import { Link } from 'react-router-dom';
 
-// import { withNamespaces, Trans } from 'react-i18next';
 import ContentWrapper from '../Layout/ContentWrapper';
-import { Row, Col } from 'reactstrap';
+import { Row , Col } from 'reactstrap';
+import ItemCard from '../Products/ItemCard';
+
+import { request } from '../../core/AjaxManager';
+import { route } from '../../core/RouteManager';
 
 class Dashboard extends Component {
+
+    constructor(props) {
+        super();
+
+        this.state = {
+            page: 1,
+            items: [],
+        }
+    }
+    
+    componentWillMount() {
+        const itemRoute = route('ajax.items');
+        const _ajax = request();
+        _ajax[itemRoute[0]](itemRoute[1]).then((result) => {
+            console.log(result);
+        });
+    }
+    
+
     render() {
         return  (
             <ContentWrapper>
                 <div className="content-heading">
+                    <div>
+                        Console
+                        <small>Oub admin</small>
+                    </div>
                 </div>
+
+                <h4 className="mt-0 page-header">今日精選</h4>
+
                 <Row>
-                    <Col xs={12} className="text-center">
-                        <h2 className="text-thin">Single view content</h2>
-                        <p>
-                            This project is an application skeleton. You can use it to quickly bootstrap your ReactJS webapp projects and dev environment for these projects.
-                            <br/>
-                            The seed app doesn't do much and has most of the feature removed so you can add theme as per your needs just following the demo app examples.
-                        </p>
+                    <Col lg={ 4 }>
+                        <ItemCard />
                     </Col>
                 </Row>
             </ContentWrapper>

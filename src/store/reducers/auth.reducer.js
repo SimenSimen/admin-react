@@ -10,10 +10,16 @@ const authReducer = (state = initialState , action) => {
     switch (action.type) {
         case USER_LOGIN:
             const defaultAjaxInstance = Manager.getInstance();    
-
-            defaultAjaxInstance._axios.defaults.headers.common = {
-                Authorization: "Bearer " + action.authState.jwt
+            const jwt = "Bearer " + action.authState.jwt;
+            
+            if (!!defaultAjaxInstance._axios.defaults.headers.Authorization) {
+                delete defaultAjaxInstance._axios.defaults.headers.Authorization;
             }
+                
+            defaultAjaxInstance._axios.defaults.headers.common = {
+                Authorization: jwt
+            };
+            
         
             return Object.assign({}, state, {
                 login: action.authState.login,

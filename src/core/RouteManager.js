@@ -32,7 +32,7 @@ class RouteManager {
      */
     get(name) {
         
-        if (!!routes[name]) {
+        if (!routes[name]) {
             throw new RouteException(`trying to get undefined route`);
         }
 

@@ -173,7 +173,7 @@ Sidebar.propTypes = {
     settings: PropTypes.object
 };
 
-const mapStateToProps = state => ({ settings: state.settings })
+const mapStateToProps = state => ({ settings: state.settings , auth: state.auth})
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actions, dispatch) })
 
 export default withRouter(connect(

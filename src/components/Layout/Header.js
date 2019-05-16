@@ -53,12 +53,12 @@ class Header extends Component {
                 <nav className="navbar topnavbar">
                     { /* START navbar header */ }
                     <div className="navbar-header">
-                        <a className="navbar-brand" href="#/">
+                        <a className="navbar-brand" href="/">
                             <div className="brand-logo">
-                                <img className="img-fluid" src="img/logo.png" alt="App Logo" />
+                                {/* <img className="img-fluid" src="img/logo.png" alt="App Logo" /> */}
                             </div>
                             <div className="brand-logo-collapsed">
-                                <img className="img-fluid" src="img/logo-single.png" alt="App Logo" />
+                                {/* <img className="img-fluid" src="img/logo-single.png" alt="App Logo" /> */}
                             </div>
                         </a>
                     </div>
@@ -77,8 +77,8 @@ class Header extends Component {
                             </a>
                         </li>
                         { /* START User avatar toggle */ }
-                        <li className="nav-item d-none d-md-block">
-                            <a  className="nav-link" onClick={ this.toggleUserblock }>
+                        <li className="nav-item d-none d-md-block" style={{cursor: 'pointer'}}>
+                            <a className="nav-link" onClick={ this.toggleUserblock }>
                                 <em className="icon-user"></em>
                             </a>
                         </li>
@@ -193,7 +193,7 @@ Header.propTypes = {
     settings: PropTypes.object
 };
 
-const mapStateToProps = state => ({ settings: state.settings })
+const mapStateToProps = state => ({ settings: state.settings , auth: state.auth })
 const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actions, dispatch) })
 
 export default connect(

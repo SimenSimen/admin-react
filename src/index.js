@@ -17,6 +17,7 @@ import App from './App';
 import './i18n';
 import './url/registerAjaxUrl';
 import './ajaxAxios';
+import './ajaxRoute';
 
 import store from './store/store';
 

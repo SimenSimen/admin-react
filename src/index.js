@@ -18,9 +18,7 @@ import './i18n';
 import './url/registerAjaxUrl';
 import './ajaxAxios';
 
-import configureStore from './store/store';
-
-const store = configureStore();
+import store from './store/store';
 
 ReactDOM.render(
     <Provider store={store}>

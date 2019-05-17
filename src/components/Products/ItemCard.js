@@ -9,21 +9,18 @@ import {
     CardText } from 'reactstrap';
 
 class ItemCard extends Component {
-
-    componentWillMount() {
-    }
-
-    componentWillUnmount() {
-    }
-
     render() {
-
+        const item = this.props.item;
         return (
-            <Card className="card-default">
-                <CardHeader>Demo content</CardHeader>
+            <Card className="card-default" style={{cursor: 'pointer'}}>
+                <CardHeader>
+                    <h3 className="text-info mb-0">{ item.name }</h3>
+                </CardHeader>
                 <CardBody>
-                    <CardTitle>Card title</CardTitle>
-                    <CardText>This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</CardText>
+                    <CardTitle>{ item.name }</CardTitle>
+                    <CardText>
+                        { item.description }
+                    </CardText>
                 </CardBody>
                 <CardFooter>
                     <div className="text-sm text-muted">Last updated 3 mins ago</div>

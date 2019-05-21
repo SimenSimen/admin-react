@@ -12,7 +12,7 @@ import {
 class ItemCard extends Component {
     render() {
         const item = this.props.item;
-        console.log(item);
+        
         return (
             <a href={ item.link } target="_blank">
                 <Card className="card-default" style={{cursor: 'pointer'}}>
@@ -21,22 +21,20 @@ class ItemCard extends Component {
                     </CardHeader>
                     <CardBody>
                         {/* <CardTitle>{ item.name }</CardTitle> */}
-                        <CardText>
-                            <Row>
-                                <Col lg={ 7 } xl={ 6 }>
-                                    <img src={ item.photo_links } alt=""/>
-                                </Col>
-                                
-                                <Col lg={ 5 }>
-                                    <h3 class="text-danger pl-4">{ parseFloat(item.price).toFixed(2) } RMB</h3>
-                                    { item.description }
-                                </Col>
-                            </Row>
-                        </CardText>
+                        <Row>
+                            <Col lg={ 7 } xl={ 6 }>
+                                <img src={ item.photo_links } alt=""/>
+                            </Col>
+                            
+                            <Col lg={ 5 }>
+                                <h3 className="text-danger pl-4">{ parseFloat(item.price).toFixed(2) } RMB</h3>
+                                { item.description }
+                            </Col>
+                        </Row>
                     </CardBody>
                     <CardFooter>
                         <div className="text-sm text-muted">
-                            <span className="float-right text-danger">{ item.created_time }</span>
+                            <span className="float-right text-danger">{ item.created_date }</span>
                         </div>
                     </CardFooter>
                 </Card>

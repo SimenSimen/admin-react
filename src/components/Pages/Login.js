@@ -78,7 +78,7 @@ class Login extends Component {
             loading: true
         })
         
-        request().post('ajax/login' , data).then((result) => {
+        request().post('/ajax/login' , data).then((result) => {
             if (!result) {
                 alert('連線有問題！');
             }

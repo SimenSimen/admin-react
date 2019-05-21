@@ -20,6 +20,10 @@ class ItemCard extends Component {
                     <CardTitle>{ item.name }</CardTitle>
                     <CardText>
                         { item.description }
+                        <p>Price: { item.price }</p>
+                        <p>
+                            <a href={ item.link} >Link</a>
+                        </p>
                     </CardText>
                 </CardBody>
                 <CardFooter>

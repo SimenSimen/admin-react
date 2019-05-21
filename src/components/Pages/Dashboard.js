@@ -49,7 +49,7 @@ class Dashboard extends Component {
                 <Row>
                     { this.state.items.map((item , index) => {
                         return (
-                            <Col lg={ 4 } key={index}>
+                            <Col lg={ 6 } xl={ 4 } key={index}>
                                 <ItemCard item={item}/>
                             </Col>
                         );

@@ -6,8 +6,8 @@ import ContentWrapper from '../Layout/ContentWrapper';
 import { Row , Col } from 'reactstrap';
 import ItemCard from '../Products/ItemCard';
 
-import { request } from '../../core/AjaxManager';
-import { route } from '../../core/RouteManager';
+import { request } from 'core/AjaxManager';
+import { route } from 'core/RouteManager';
 
 class Dashboard extends Component {
 

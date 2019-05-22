@@ -8,8 +8,8 @@ import { changeLoginState } from '../../store/actions/actions';
 
 import FormValidator from '../Forms/FormValidator.js';
 
-import { request } from '../../core/AjaxManager';
-import { route } from '../../core/RouteManager';
+import { request } from 'core/AjaxManager';
+import { route } from 'core/RouteManager';
 
 import Loading from '../Common/Loading';
 

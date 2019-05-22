@@ -11,8 +11,7 @@ import FormValidator from '../Forms/FormValidator.js';
 import { request } from '../../core/AjaxManager';
 import { route } from '../../core/RouteManager';
 
-
-import 'spinkit/css/spinkit.css';
+import Loading from '../Common/Loading';
 
 class Login extends Component {
 
@@ -124,22 +123,7 @@ class Login extends Component {
                     <div className="card-body">
                         <div className="text-center py-2">
                             { !this.state.loading && <p>登入以繼續</p> }
-                            { this.state.loading && 
-                                <div className="sk-circle hidden">
-                                    <div className="sk-circle1 sk-child"></div>
-                                    <div className="sk-circle2 sk-child"></div>
-                                    <div className="sk-circle3 sk-child"></div>
-                                    <div className="sk-circle4 sk-child"></div>
-                                    <div className="sk-circle5 sk-child"></div>
-                                    <div className="sk-circle6 sk-child"></div>
-                                    <div className="sk-circle7 sk-child"></div>
-                                    <div className="sk-circle8 sk-child"></div>
-                                    <div className="sk-circle9 sk-child"></div>
-                                    <div className="sk-circle10 sk-child"></div>
-                                    <div className="sk-circle11 sk-child"></div>
-                                    <div className="sk-circle12 sk-child"></div>
-                                </div>
-                            }
+                            { this.state.loading && <Loading/> }
                         </div>
                         <form className="mb-3" name="formLogin" onSubmit={this.onSubmit}>
                             <div className="form-group">

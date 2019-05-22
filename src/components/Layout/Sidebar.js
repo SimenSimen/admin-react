@@ -11,22 +11,31 @@ import * as actions from '../../store/actions/actions';
 import SidebarRun from './Sidebar.run';
 import SidebarUserBlock from './SidebarUserBlock';
 
-import Menu from '../../Menu.js';
+import Loading from '../Common/Loading';
+
+import { request } from 'core/AjaxManager';
+import { route } from 'core/RouteManager';
 
 /** Component to display headings on sidebar */
 const SidebarItemHeader = ({item}) => (
     <li className="nav-heading">
-        <span><Trans i18nKey={item.translate}>{item.heading}</Trans></span>
+        <span>
+            { item.translate && <Trans i18nKey={item.translate}>{item.name}</Trans>}
+            { !item.translate && item.display_name }
+        </span>
     </li>
 )
 
 /** Normal items for the sidebar */
 const SidebarItem = ({item, isActive}) => (
     <li className={ isActive ? 'active' : '' }>
-        <Link to={item.path} title={item.name}>
+        <Link to={item.path ? item.path : '/'} title={item.translate ? item.name : item.display_name }>
             {item.label && <Badge tag="div" className="float-right" color={item.label.color}>{item.label.value}</Badge>}
             {item.icon && <em className={item.icon}></em>}
-            <span><Trans i18nKey={item.translate}>{item.name}</Trans></span>
+            <span>
+                { item.translate && <Trans i18nKey={item.translate}>{item.name}</Trans>}
+                { !item.translate && item.display_name }
+            </span>
         </Link>
     </li>
 )
@@ -54,14 +63,28 @@ const SidebarSubHeader = ({item}) => (
 
 class Sidebar extends Component {
     state = {
-        collapse: {}
+        collapse: {},
+        loading: false,
+        menu: []
     }
 
     componentDidMount() {
+        const self = this;
+
+        this.setState({
+            loading: true,
+        });
+
+        request().get(route('ajax.menu-admin')).then((result) => {
+            self.setState({
+                loading: false,
+                menu: [...result.data.menu]
+            });
+        });
         // pass navigator to access router api
         SidebarRun(this.navigator, this.closeSidebar);
         // prepare the flags to handle menu collapsed states
-        this.buildCollapseList()
+        // this.buildCollapseList()
 
         // Listen for routes changes in order to hide the sidebar on mobile
         this.props.history.listen(this.closeSidebar);
@@ -74,7 +97,7 @@ class Sidebar extends Component {
     /** prepare initial state of collapse menus. Doesnt allow same route names */
     buildCollapseList = () => {
         let collapse = {};
-        Menu
+        this.state.menu
             .filter(({heading}) => !heading)
             .forEach(({name, path, submenu}) => {
                 collapse[name] = this.routeActive(submenu ? submenu.map(({path})=>path) : path)
@@ -111,7 +134,7 @@ class Sidebar extends Component {
 
     /** map menu config to string to determine which element to render */
     itemType = item => {
-        if (item.heading) return 'heading';
+        if (item.is_heading) return 'heading';
         if (!item.submenu) return 'menu';
         if (item.submenu) return 'submenu';
     }
@@ -124,6 +147,11 @@ class Sidebar extends Component {
                     <nav data-sidebar-anyclick-close="" className="sidebar">
                         { /* START sidebar nav */ }
                         <ul className="sidebar-nav">
+                            <li>
+                                <div className="text-center py-2">
+                                    { this.state.loading && <Loading/>}
+                                </div>
+                            </li>
                             { /* START user info */ }
                             <li className="has-user-block">
                                 <SidebarUserBlock/>
@@ -132,7 +160,7 @@ class Sidebar extends Component {
 
                             { /* Iterates over all sidebar items */ }
                             {
-                                Menu.map((item, i) => {
+                                this.state.menu.map((item, i) => {
                                     // heading
                                     if(this.itemType(item) === 'heading')
                                         return (

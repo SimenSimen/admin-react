@@ -21,10 +21,9 @@ class Dashboard extends Component {
     }
     
     componentWillMount() {
-        const itemRoute = route('ajax.items');
         const _ajax = request();
         
-        _ajax[itemRoute[0]](itemRoute[1]).then((result) => {
+        _ajax.get(route('ajax.items')).then((result) => {
             if (result.data) {
                 this.setState({
                     items: result.data.items

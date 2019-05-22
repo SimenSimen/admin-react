@@ -15,7 +15,6 @@ import { Provider } from 'react-redux';
 import App from './App';
 
 import './i18n';
-import './url/registerAjaxUrl';
 import './ajaxAxios';
 import './ajaxRoute';
 

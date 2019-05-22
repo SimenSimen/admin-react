@@ -10,17 +10,16 @@ class RouteManager {
     /**
      * set route;
      * 
-     * @param {String} method 
      * @param {String} url 
      * @param {String} name 
      * @returns {void}
      */
-    set(method , url , name) {
+    set(url , name) {
         if (!!routes[name]) {
             throw new RouteException(`route's name is already set`);
         }
 
-        routes[name] = [method , url];
+        routes[name] = [url];
     }
 
     /**
@@ -54,8 +53,8 @@ const manager = new RouteManager();
 export function route(name) {
 
     switch (arguments.length) {
-        case 3:
-            manager.set(arguments[0] , arguments[1] , arguments[2]);
+        case 2:
+            manager.set(arguments[0] , arguments[1]);
             return null;
         default:
             break;

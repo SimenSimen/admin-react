@@ -9,6 +9,7 @@ import { changeLoginState } from '../../store/actions/actions';
 import FormValidator from '../Forms/FormValidator.js';
 
 import { request } from '../../core/AjaxManager';
+import { route } from '../../core/RouteManager';
 
 
 import 'spinkit/css/spinkit.css';
@@ -78,7 +79,7 @@ class Login extends Component {
             loading: true
         })
         
-        request().post('/ajax/login' , data).then((result) => {
+        request().post(route('ajax.login') , data).then((result) => {
             if (!result) {
                 alert('連線有問題！');
             }

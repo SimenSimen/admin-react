@@ -1,63 +1,88 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces, Trans } from 'react-i18next';
-import { Link, withRouter } from 'react-router-dom';
-import { Collapse, Badge } from 'reactstrap';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withNamespaces, Trans } from 'react-i18next'
+import { Link, withRouter } from 'react-router-dom'
+import { Collapse, Badge } from 'reactstrap'
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../store/actions/actions';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as actions from '../../store/actions/actions'
 
-import SidebarRun from './Sidebar.run';
-import SidebarUserBlock from './SidebarUserBlock';
+import SidebarRun from './Sidebar.run'
+import SidebarUserBlock from './SidebarUserBlock'
 
-import Loading from '../Common/Loading';
+import Loading from '../Common/Loading'
 
-import { request } from 'core/AjaxManager';
-import { route } from 'core/RouteManager';
+import { request } from 'core/AjaxManager'
+import { route } from 'core/RouteManager'
 
 /** Component to display headings on sidebar */
-const SidebarItemHeader = ({item}) => (
+const SidebarItemHeader = ({ item }) => (
     <li className="nav-heading">
         <span>
-            { item.translate && <Trans i18nKey={item.translate}>{item.name}</Trans>}
-            { !item.translate && item.display_name }
+            {item.translate && (
+                <Trans i18nKey={item.translate}>{item.name}</Trans>
+            )}
+            {!item.translate && item.display_name}
         </span>
     </li>
 )
 
 /** Normal items for the sidebar */
-const SidebarItem = ({item, isActive}) => (
-    <li className={ isActive ? 'active' : '' }>
-        <Link to={item.path ? item.path : '/'} title={item.translate ? item.name : item.display_name }>
-            {item.label && <Badge tag="div" className="float-right" color={item.label.color}>{item.label.value}</Badge>}
-            {item.icon && <em className={item.icon}></em>}
+const SidebarItem = ({ item, isActive }) => (
+    <li className={isActive ? 'active' : ''}>
+        <Link
+            to={item.path ? item.path : '/'}
+            title={item.translate ? item.name : item.display_name}
+        >
+            {item.label && (
+                <Badge
+                    tag="div"
+                    className="float-right"
+                    color={item.label.color}
+                >
+                    {item.label.value}
+                </Badge>
+            )}
+            {item.icon && <em className={item.icon} />}
             <span>
-                { item.translate && <Trans i18nKey={item.translate}>{item.name}</Trans>}
-                { !item.translate && item.display_name }
+                {item.translate && (
+                    <Trans i18nKey={item.translate}>{item.name}</Trans>
+                )}
+                {!item.translate && item.display_name}
             </span>
         </Link>
     </li>
 )
 
 /** Build a sub menu with items inside and attach collapse behavior */
-const SidebarSubItem = ({item, isActive, handler, children, isOpen}) => (
-    <li className={ isActive ? 'active' : '' }>
-        <div className="nav-item" onClick={ handler }>
-            {item.label && <Badge tag="div" className="float-right" color={item.label.color}>{item.label.value}</Badge>}
-            {item.icon && <em className={item.icon}></em>}
-            <span><Trans i18nKey={item.translate}>{item.name}</Trans></span>
+const SidebarSubItem = ({ item, isActive, handler, children, isOpen }) => (
+    <li className={isActive ? 'active' : ''}>
+        <div className="nav-item" onClick={handler}>
+            {item.label && (
+                <Badge
+                    tag="div"
+                    className="float-right"
+                    color={item.label.color}
+                >
+                    {item.label.value}
+                </Badge>
+            )}
+            {item.icon && <em className={item.icon} />}
+            <span>
+                <Trans i18nKey={item.translate}>{item.name}</Trans>
+            </span>
         </div>
-        <Collapse isOpen={ isOpen }>
+        <Collapse isOpen={isOpen}>
             <ul id={item.path} className="sidebar-nav sidebar-subnav">
-                { children }
+                {children}
             </ul>
         </Collapse>
     </li>
 )
 
 /** Component used to display a header on menu when using collapsed/hover mode */
-const SidebarSubHeader = ({item}) => (
+const SidebarSubHeader = ({ item }) => (
     <li className="sidebar-subnav-header">{item.name}</li>
 )
 
@@ -65,52 +90,58 @@ class Sidebar extends Component {
     state = {
         collapse: {},
         loading: false,
-        menu: []
+        menu: [],
     }
 
     componentDidMount() {
-        const self = this;
+        const self = this
 
         this.setState({
             loading: true,
-        });
+        })
 
-        request().get(route('ajax.menu-admin')).then((result) => {
-            self.setState({
-                loading: false,
-                menu: [...result.data.menu]
-            });
-        });
+        request()
+            .get(route('ajax.menu-admin'))
+            .then(result => {
+                if (result.data) {
+                    self.setState({
+                        loading: false,
+                        menu: [...result.data.menu],
+                    })
+                }
+            })
         // pass navigator to access router api
-        SidebarRun(this.navigator, this.closeSidebar);
+        SidebarRun(this.navigator, this.closeSidebar)
         // prepare the flags to handle menu collapsed states
         // this.buildCollapseList()
 
         // Listen for routes changes in order to hide the sidebar on mobile
-        this.props.history.listen(this.closeSidebar);
+        this.props.history.listen(this.closeSidebar)
     }
 
     closeSidebar = () => {
-        this.props.actions.toggleSetting('asideToggled');
+        this.props.actions.toggleSetting('asideToggled')
     }
 
     /** prepare initial state of collapse menus. Doesnt allow same route names */
     buildCollapseList = () => {
-        let collapse = {};
+        let collapse = {}
         this.state.menu
-            .filter(({heading}) => !heading)
-            .forEach(({name, path, submenu}) => {
-                collapse[name] = this.routeActive(submenu ? submenu.map(({path})=>path) : path)
+            .filter(({ heading }) => !heading)
+            .forEach(({ name, path, submenu }) => {
+                collapse[name] = this.routeActive(
+                    submenu ? submenu.map(({ path }) => path) : path
+                )
             })
-        this.setState({collapse});
+        this.setState({ collapse })
     }
 
     navigator = route => {
-        this.props.history.push(route);
+        this.props.history.push(route)
     }
 
     routeActive(paths) {
-        paths = Array.isArray(paths) ? paths : [paths];
+        paths = Array.isArray(paths) ? paths : [paths]
         return paths.some(p => this.props.location.pathname.indexOf(p) > -1)
     }
 
@@ -119,92 +150,130 @@ class Sidebar extends Component {
             if (this.state.collapse[c] === true && c !== stateName)
                 this.setState({
                     collapse: {
-                        [c]: false
-                    }
-                });
+                        [c]: false,
+                    },
+                })
         }
         this.setState({
             collapse: {
-                [stateName]: !this.state.collapse[stateName]
-            }
-        });
+                [stateName]: !this.state.collapse[stateName],
+            },
+        })
     }
 
-    getSubRoutes = item => item.submenu.map(({path}) => path)
+    getSubRoutes = item => item.submenu.map(({ path }) => path)
 
     /** map menu config to string to determine which element to render */
     itemType = item => {
-        if (item.is_heading) return 'heading';
-        if (!item.submenu) return 'menu';
-        if (item.submenu) return 'submenu';
+        if (item.is_heading) return 'heading'
+        if (!item.submenu) return 'menu'
+        if (item.submenu) return 'submenu'
     }
 
     render() {
         return (
-            <aside className='aside-container'>
-                { /* START Sidebar (left) */ }
+            <aside className="aside-container">
+                {/* START Sidebar (left) */}
                 <div className="aside-inner">
                     <nav data-sidebar-anyclick-close="" className="sidebar">
-                        { /* START sidebar nav */ }
+                        {/* START sidebar nav */}
                         <ul className="sidebar-nav">
                             <li>
                                 <div className="text-center py-2">
-                                    { this.state.loading && <Loading/>}
+                                    {this.state.loading && <Loading />}
                                 </div>
                             </li>
-                            { /* START user info */ }
+                            {/* START user info */}
                             <li className="has-user-block">
-                                <SidebarUserBlock/>
+                                <SidebarUserBlock />
                             </li>
-                            { /* END user info */ }
+                            {/* END user info */}
 
-                            { /* Iterates over all sidebar items */ }
-                            {
-                                this.state.menu.map((item, i) => {
-                                    // heading
-                                    if(this.itemType(item) === 'heading')
+                            {/* Iterates over all sidebar items */}
+                            {this.state.menu.map((item, i) => {
+                                // heading
+                                if (this.itemType(item) === 'heading')
+                                    return (
+                                        <SidebarItemHeader
+                                            item={item}
+                                            key={i}
+                                        />
+                                    )
+                                else {
+                                    if (this.itemType(item) === 'menu')
                                         return (
-                                            <SidebarItemHeader item={item} key={i} />
+                                            <SidebarItem
+                                                isActive={this.routeActive(
+                                                    item.path
+                                                )}
+                                                item={item}
+                                                key={i}
+                                            />
                                         )
-                                    else {
-                                        if(this.itemType(item) === 'menu')
-                                            return (
-                                                <SidebarItem isActive={this.routeActive(item.path)} item={item} key={i} />
-                                            )
-                                        if(this.itemType(item) === 'submenu')
-                                            return [
-                                                <SidebarSubItem item={item} isOpen={this.state.collapse[item.name]} handler={ this.toggleItemCollapse.bind(this, item.name) } isActive={this.routeActive(this.getSubRoutes(item))} key={i}>
-                                                    <SidebarSubHeader item={item} key={i}/>
-                                                    {
-                                                        item.submenu.map((subitem, i) =>
-                                                            <SidebarItem key={i} item={subitem} isActive={this.routeActive(subitem.path)} />
-                                                        )
-                                                    }
-                                                </SidebarSubItem>
-                                            ]
-                                    }
-                                    return null; // unrecognized item
-                                })
-                            }
+                                    if (this.itemType(item) === 'submenu')
+                                        return [
+                                            <SidebarSubItem
+                                                item={item}
+                                                isOpen={
+                                                    this.state.collapse[
+                                                        item.name
+                                                    ]
+                                                }
+                                                handler={this.toggleItemCollapse.bind(
+                                                    this,
+                                                    item.name
+                                                )}
+                                                isActive={this.routeActive(
+                                                    this.getSubRoutes(item)
+                                                )}
+                                                key={i}
+                                            >
+                                                <SidebarSubHeader
+                                                    item={item}
+                                                    key={i}
+                                                />
+                                                {item.submenu.map(
+                                                    (subitem, i) => (
+                                                        <SidebarItem
+                                                            key={i}
+                                                            item={subitem}
+                                                            isActive={this.routeActive(
+                                                                subitem.path
+                                                            )}
+                                                        />
+                                                    )
+                                                )}
+                                            </SidebarSubItem>,
+                                        ]
+                                }
+                                return null // unrecognized item
+                            })}
                         </ul>
-                        { /* END sidebar nav */ }
+                        {/* END sidebar nav */}
                     </nav>
                 </div>
-                { /* END Sidebar (left) */ }
+                {/* END Sidebar (left) */}
             </aside>
-        );
+        )
     }
 }
 
 Sidebar.propTypes = {
     actions: PropTypes.object,
-    settings: PropTypes.object
-};
+    settings: PropTypes.object,
+}
 
-const mapStateToProps = state => ({ settings: state.settings , auth: state.auth})
-const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(actions, dispatch) })
+const mapStateToProps = state => ({
+    settings: state.settings,
+    auth: state.auth,
+})
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators(actions, dispatch),
+})
 
-export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withNamespaces('translations')(Sidebar)));
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(withNamespaces('translations')(Sidebar))
+)

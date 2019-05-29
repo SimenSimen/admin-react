@@ -202,8 +202,8 @@ class Sidebar extends Component {
     /** map menu config to string to determine which element to render */
     itemType = item => {
         if (item.is_heading) return 'heading'
-        if (!item.submenu) return 'menu'
-        if (item.submenu) return 'submenu'
+        if (item.submenu.length === 0) return 'menu'
+        if (item.submenu.length > 0) return 'submenu'
     }
 
     render() {

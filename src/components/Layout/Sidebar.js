@@ -70,7 +70,10 @@ const SidebarSubItem = ({ item, isActive, handler, children, isOpen }) => (
             )}
             {item.icon && <em className={item.icon} />}
             <span>
-                <Trans i18nKey={item.translate}>{item.name}</Trans>
+                {item.translate && (
+                    <Trans i18nKey={item.translate}>{item.name}</Trans>
+                )}
+                {!item.translate && item.display_name}
             </span>
         </div>
         <Collapse isOpen={isOpen}>
@@ -104,9 +107,11 @@ class Sidebar extends Component {
             .get(route('ajax.menu-admin'))
             .then(result => {
                 if (result.data) {
+                    const menu = self.traversalMenu([...result.data.menu])
+
                     self.setState({
                         loading: false,
-                        menu: [...result.data.menu],
+                        menu: menu,
                     })
                 }
             })
@@ -117,6 +122,37 @@ class Sidebar extends Component {
 
         // Listen for routes changes in order to hide the sidebar on mobile
         this.props.history.listen(this.closeSidebar)
+    }
+
+    traversalMenu = menuData => {
+        const result = []
+        const parentMenu = {}
+
+        let countLoop = 0
+        let maxLoop = 5000
+
+        while (countLoop < maxLoop && menuData.length > 0) {
+            const item = menuData.shift()
+
+            if (!item.parent) {
+                result.push(item)
+                item.submenu = []
+
+                parentMenu[item.id] = item.submenu
+            } else {
+                if (!!parentMenu[item.parent]) {
+                    parentMenu[item.parent].push(item)
+                } else if (menuData.length !== 0) {
+                    menuData.push(item)
+                }
+            }
+
+            countLoop++
+            if (countLoop === maxLoop) {
+                console.error('Danger !! you make a infinity loop!')
+            }
+        }
+        return result
     }
 
     closeSidebar = () => {

@@ -16,7 +16,7 @@ const defaultAjaxInstance = Manager.getInstance()
 
 defaultAjaxInstance.setErrorHandler(function(error, datetime) {
     const res = error.response
-    if (res.status === 401 && res.data.err_message === 'error_token') {
+    if (res.status === 401 && res.data.msg === 'error_token') {
         store.dispatch(userLogout())
     }
 })

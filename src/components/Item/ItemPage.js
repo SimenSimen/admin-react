@@ -7,26 +7,38 @@ import ContentWrapper from '../Layout/ContentWrapper'
 import { request } from 'core/AjaxManager'
 import { route } from 'core/RouteManager'
 
-import $ from 'jquery';
-// import Datatable from '../Common/Datatable'
+import Datatable, { configServer } from '../Common/Datatable'
 
 export default class ItemPage extends Component {
     constructor(props) {
         super()
 
-        this.state = {}
-    }
+        const ajaxSetting = {
+            url: route('ajax.items.datatble'),
+            data: data => {
+            },
+        }
 
-    componentWillMount() {
-        const _ajax = request()
+        configServer.ajax = { ...configServer.ajax, ...ajaxSetting }
 
-        // _ajax.get(`${route('ajax.items')}?_today=1`).then((result) => {
-        //     if (result.data) {
-        //         this.setState({
-        //             items: result.data.items
-        //         });
-        //     }
-        // });
+        configServer.ordering = true
+        configServer.columns = [
+            { data: 'img', name: 'img' },
+            { data: 'id', name: 'id' },
+            { data: 'name', name: 'name' },
+            { data: 'price', name: 'price' },
+            { data: 'sales', name: 'sales' },
+            { data: 'created_date', name: 'created_date' },
+            { data: 'operation', name: 'operationg' },
+        ]
+
+        configServer.columnDefs = [
+            { targets: [0, 1, 2, 3, 4, 5], orderable: false },
+        ]
+
+        this.state = {
+            datatableConfig: configServer,
+        }
     }
 
     render() {
@@ -39,7 +51,22 @@ export default class ItemPage extends Component {
                     </div>
                 </div>
 
-                <h4 className="mt-0 page-header">商品列表</h4>
+                <Datatable options={this.state.datatableConfig}>
+                    <table className="table table-striped my-4 w-100">
+                        <thead>
+                            <tr>
+                                <th />
+                                <th data-priority="1">ID</th>
+                                <th>名稱</th>
+                                <th className="sort-numeric">價格</th>
+                                <th>熱度</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody />
+                    </table>
+                </Datatable>
             </ContentWrapper>
         )
     }

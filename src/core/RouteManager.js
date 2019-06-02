@@ -1,7 +1,6 @@
 import { RouteException } from './Error';
 
 const routes = {};
-
 /**
  * route manager for ajax;
  */
@@ -19,7 +18,7 @@ class RouteManager {
             throw new RouteException(`route's name is already set`);
         }
 
-        routes[name] = [url];
+        routes[name] = url;
     }
 
     /**

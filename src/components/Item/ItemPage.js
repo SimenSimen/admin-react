@@ -15,25 +15,46 @@ export default class ItemPage extends Component {
 
         const ajaxSetting = {
             url: route('ajax.items.datatble'),
-            data: data => {
-            },
+            data: data => {},
         }
 
         configServer.ajax = { ...configServer.ajax, ...ajaxSetting }
 
         configServer.ordering = true
         configServer.columns = [
-            { data: 'img', name: 'img' },
+            {
+                data: 'img',
+                name: 'photo_links',
+                orderable: false,
+                render: (data, type, row, mata) => {
+                    return `
+                        <a href="${row.photo_links}" target="_blank">
+                            <img class="img-thumbnail" src="${
+                                row.photo_links
+                            }_120x120q50.jpg" alt="${row.name}">
+                        </a>
+                        `
+                },
+            },
             { data: 'id', name: 'id' },
             { data: 'name', name: 'name' },
             { data: 'price', name: 'price' },
-            { data: 'sales', name: 'sales' },
+            {
+                data: 'sale_amount',
+                name: 'sale_amount',
+            },
             { data: 'created_date', name: 'created_date' },
-            { data: 'operation', name: 'operationg' },
+            {
+                data: 'operation',
+                render: (data, type, row, mata) => {
+                    // console.log(data, type, row, mata)
+                    return ''
+                },
+            },
         ]
 
         configServer.columnDefs = [
-            { targets: [0, 1, 2, 3, 4, 5], orderable: false },
+            { targets: [1, 2, 3, 4, 5], orderable: false },
         ]
 
         this.state = {

@@ -80,13 +80,13 @@ export const configServer = (() => {
         },
         // Text translation options
         // Note the required keywords between underscores (e.g _MENU_)
-        oLanguage: {
+        language: {
             sSearch: '<em class="fa fa-search"></em>',
-            sLengthMenu: '_MENU_ records per page',
-            info: 'Showing page _PAGE_ of _PAGES_',
-            zeroRecords: 'Nothing found - sorry',
+            sLengthMenu: '一頁 _MENU_ 筆',
+            info: '第 _PAGE_ 頁 ， 總共 _PAGES_ 頁',
+            zeroRecords: '目前查無資料',
             infoEmpty: 'No records available',
-            infoFiltered: '(filtered from _MAX_ total records)',
+            infoFiltered: '(從 _MAX_ 筆資料過濾)',
             oPaginate: {
                 sNext: '<em class="fa fa-caret-right"></em>',
                 sPrevious: '<em class="fa fa-caret-left"></em>',

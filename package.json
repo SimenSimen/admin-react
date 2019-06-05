@@ -47,6 +47,7 @@
     "datatables.net-keytable-bs": "2.5.0",
     "datatables.net-responsive": "2.2.3",
     "datatables.net-responsive-bs": "2.2.3",
+    "dateformat": "^3.0.3",
     "deep-equal": "1.0.1",
     "draft-js": "0.10.5",
     "easy-pie-chart": "2.1.7",

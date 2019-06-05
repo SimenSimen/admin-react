@@ -23,7 +23,7 @@ class ItemCard extends Component {
                         {/* <CardTitle>{ item.name }</CardTitle> */}
                         <Row>
                             <Col lg={ 7 } xl={ 6 }>
-                                <img className="img-thumbnail" src={ item.photo_links } alt={ item.name  }/>
+                                <img className="img-fluid rounded" src={ item.photo_links } alt={ item.name  }/>
                             </Col>
                             
                             <Col lg={ 5 }>

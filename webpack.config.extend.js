@@ -35,11 +35,11 @@ module.exports = (webpackConfig, env, { paths }) => {
     });
     */
 
-
     // Fix for flot resize
     webpackConfig.module.rules[2].oneOf.splice(0, 0, {
-        test: /datatables\.net.*.js$/,
-        use: ['imports-loader?define=>false'],
+        test: /datatables\.net.*/,
+        exclude: [/\.css$/],
+        use: ['imports-loader?define=>false,this=>window'],
     })
 
     webpackConfig.module.rules[2].oneOf.splice(0, 0, {

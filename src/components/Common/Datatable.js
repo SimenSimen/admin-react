@@ -5,27 +5,27 @@ import $ from 'jquery'
 
 import { request } from 'core/AjaxManager'
 
-require('datatables.net')(window , $)
+require('datatables.net')(window, $)
 // Datatables
-require('datatables.net-bs')(window , $)
-require('datatables.net-bs4/js/dataTables.bootstrap4.js')(window , $)
+require('datatables.net-bs')(window, $)
+require('datatables.net-bs4/js/dataTables.bootstrap4.js')(window, $)
 require('datatables.net-bs4/css/dataTables.bootstrap4.css')
-require('datatables.net-buttons')(window , $)
-require('datatables.net-buttons-bs')(window , $)
-require('datatables.net-responsive')(window , $)
-require('datatables.net-responsive-bs')(window , $)
+require('datatables.net-buttons')(window, $)
+require('datatables.net-buttons-bs')(window, $)
+require('datatables.net-responsive')(window, $)
+require('datatables.net-responsive-bs')(window, $)
 require('datatables.net-responsive-bs/css/responsive.bootstrap.css')
 // Column visibility
-require('datatables.net-buttons/js/buttons.colVis.js')(window , $)
+require('datatables.net-buttons/js/buttons.colVis.js')(window, $)
 // HTML 5 file export
-require('datatables.net-buttons/js/buttons.html5.js')(window , $)
+require('datatables.net-buttons/js/buttons.html5.js')(window, $)
 // Flash file export
-require('datatables.net-buttons/js/buttons.flash.js')(window , $)
+require('datatables.net-buttons/js/buttons.flash.js')(window, $)
 // Print view button
-require('datatables.net-buttons/js/buttons.print.js')(window , $)
-require('datatables.net-keytable')(window , $)
+require('datatables.net-buttons/js/buttons.print.js')(window, $)
+require('datatables.net-keytable')(window, $)
 require('datatables.net-keytable-bs/css/keyTable.bootstrap.css')
-require('jszip/dist/jszip.js')(window , $)
+require('jszip/dist/jszip.js')(window, $)
 require('pdfmake/build/pdfmake.js')
 require('pdfmake/build/vfs_fonts.js')
 
@@ -54,7 +54,9 @@ export default class Datatable extends Component {
     }
 
     componentWillUnmount() {
-        $(this.tableElement).DataTable().destroy(true);
+        $(this.tableElement)
+            .DataTable()
+            .destroy(true)
     }
 
     setRef = node => (this.tableElement = node)
@@ -67,6 +69,11 @@ export default class Datatable extends Component {
 }
 
 export const configServer = (() => {
+    const header = request()._axios.defaults.headers
+    const auth = header.common.Authorization
+        ? header.common.Authorization
+        : header.Authorization
+
     return {
         paging: true,
         info: true,
@@ -75,7 +82,7 @@ export const configServer = (() => {
         processing: true,
         ajax: {
             headers: {
-                Authorization: request()._axios.defaults.headers.Authorization,
+                Authorization: auth,
             },
         },
         // Text translation options

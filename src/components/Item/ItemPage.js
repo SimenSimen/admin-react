@@ -16,7 +16,6 @@ export default class ItemPage extends Component {
 
         const ajaxSetting = {
             url: route('ajax.items.datatble'),
-            data: data => {},
         }
 
         configServer.ajax = { ...configServer.ajax, ...ajaxSetting }
@@ -75,6 +74,7 @@ export default class ItemPage extends Component {
             },
             {
                 data: 'operation',
+                width: '10%',
                 render: (data, type, row, mata) => {
                     // console.log(data, type, row, mata)
                     return ''

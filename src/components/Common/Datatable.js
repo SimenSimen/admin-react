@@ -34,6 +34,17 @@ require('pdfmake/build/vfs_fonts.js')
  * Only DOM child elements, componets are not supported (e.g. <Table>)
  */
 export default class Datatable extends Component {
+    
+    /**
+     * datatable instance
+     */
+    dtInstance
+
+    /**
+     * total row amount
+     */
+    recordsTotal
+
     static propTypes = {
         /** datatables options object */
         options: PropTypes.object,
@@ -48,7 +59,20 @@ export default class Datatable extends Component {
     }
 
     componentDidMount() {
-        const dtInstance = $(this.tableElement).dataTable(this.props.options)
+        if (!this.props.options.ajax.data) {
+            this.props.options.ajax.data = data => {
+                /** 不要每次都計算總筆數 */
+                if (this.dtInstance) {
+                    if (!this.recordsTotal)
+                        this.recordsTotal = this.dtInstance.ajax.json().recordsTotal;
+                    
+                    data.recordsTotal = this.recordsTotal;
+                }
+            }
+        }
+        const dtInstance = (this.dtInstance = $(this.tableElement).DataTable(
+            this.props.options
+        ))
 
         if (this.props.dtInstance) this.props.dtInstance(dtInstance)
     }
@@ -90,9 +114,9 @@ export const configServer = (() => {
         language: {
             sSearch: '<em class="fa fa-search"></em>',
             sLengthMenu: '一頁 _MENU_ 筆',
-            info: '第 _PAGE_ 頁 ， 總共 _PAGES_ 頁',
+            info: '第 _PAGE_ 頁，總共 _PAGES_頁。篩出_MAX_筆，總共_TOTAL_筆',
             zeroRecords: '目前查無資料',
-            infoEmpty: 'No records available',
+            infoEmpty: '目前無資料',
             infoFiltered: '(從 _MAX_ 筆資料過濾)',
             oPaginate: {
                 sNext: '<em class="fa fa-caret-right"></em>',

@@ -20,15 +20,6 @@ class Dashboard extends Component {
     }
 
     componentWillMount() {
-        const _ajax = request()
-
-        _ajax.get(`${route('ajax.items')}?_today=1`).then(result => {
-            if (result.data) {
-                this.setState({
-                    items: result.data.items,
-                })
-            }
-        })
     }
 
     render() {
@@ -41,16 +32,8 @@ class Dashboard extends Component {
                     </div>
                 </div>
 
-                <h4 className="mt-0 page-header">今日精選</h4>
 
                 <Row>
-                    {this.state.items.map((item, index) => {
-                        return (
-                            <Col lg={6} xl={4} key={index}>
-                                <ItemCard item={item} />
-                            </Col>
-                        )
-                    })}
                 </Row>
             </ContentWrapper>
         )

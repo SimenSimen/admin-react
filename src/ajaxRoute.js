@@ -1,8 +1,13 @@
 import { route } from './core/RouteManager';
 
-route('/ajax/login' , 'ajax.login');
+import * as dotenv from 'dotenv'
 
-route('/ajax/items' , 'ajax.items');
-route('/ajax/items/datatable' , 'ajax.items.datatble');
+dotenv.config();
 
-route('/ajax/menu-admin' , 'ajax.menu-admin');
+const prefix = process.env.AJAX_PREFIX ? process.env.AJAX_PREFIX : 'ajax';
+route(`/${prefix}/login` , 'ajax.login');
+
+route(`/${prefix}/items` , 'ajax.items');
+route(`/${prefix}/items/datatable` , 'ajax.items.datatble');
+
+route(`/${prefix}/menu-admin` , 'ajax.menu-admin');

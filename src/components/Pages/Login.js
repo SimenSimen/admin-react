@@ -13,6 +13,8 @@ import { route } from 'core/RouteManager'
 
 import Loading from '../Common/Loading'
 
+import AjaxForm from 'components/Common/AjaxForm'
+
 class Login extends Component {
     constructor(props) {
         super()
@@ -137,11 +139,7 @@ class Login extends Component {
                             {!this.state.loading && <p>登入以繼續</p>}
                             {this.state.loading && <Loading />}
                         </div>
-                        <form
-                            className="mb-3"
-                            name="formLogin"
-                            onSubmit={this.onSubmit}
-                        >
+                        <AjaxForm>
                             <div className="form-group">
                                 <div className="input-group with-focus">
                                     <Input
@@ -246,8 +244,8 @@ class Login extends Component {
                             >
                                 登入
                             </button>
-                        </form>
-                        <p className="pt-3 text-center">註冊請洽管理員</p>
+                            <p className="pt-3 text-center">註冊請洽管理員</p>
+                        </AjaxForm>
                     </div>
                 </div>
                 <div className="p-3 text-center">
